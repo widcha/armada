@@ -45,18 +45,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      PORT: 8080
-      APP_NAME: armada
-      APP_VERSION: 0.1
+      RABBITMQ_URL: amqp://armada_user:armada_pass@rabbitmq:5672/
+      MQTT_BROKER: tcp://mqtt-broker:1883
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: armada_db
       DB_USERNAME: armada_user
       DB_PASSWORD: armada_pass
-      DB_HOST: localhost
-      DB_NAME: armada_db
-      DB_PORT: 5432
-      MQTT_BROKER: tcp://mqtt-broker:1883
-      RABBITMQ_URL: amqp://armada_user:armada_pass@rabbitmq:5672/
-      GEOFENCE_LAT: -6.2088
-      GEOFENCE_LONG: 106.8456
     restart: unless-stopped
     links:
       - postgres

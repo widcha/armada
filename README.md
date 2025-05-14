@@ -65,21 +65,20 @@ File `mock/publisher.go` akan mengirimkan data lokasi kendaraan ke MQTT broker s
 ## 📬 Endpoint API
 
 - **Lokasi terakhir kendaraan**
-  \`\`\`
   GET /vehicles/{vehicle_id}/location
-  \`\`\`
 
 - **Riwayat lokasi kendaraan**
-  \`\`\`
   GET /vehicles/{vehicle_id}/history?start=<unix>&end=<unix>
-  \`\`\`
 
 Contoh:
 
 ```bash
 curl http://localhost:8080/vehicles/B1234XYZ/location
-curl "http://localhost:8080/vehicles/B1234XYZ/history?start=1747200000&end=1747209999"
+curl http://localhost:8080/vehicles/B1234XYZ/history?start=1747200000&end=1747209999
 ```
+
+Berikut untuk Postman Collection:
+https://drive.google.com/file/d/11wKY413wWnRv7QVnbPR0kTYKUOSuqBMB/view?usp=sharing
 
 ---
 
