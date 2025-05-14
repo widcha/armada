@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: armada_user
+      RABBITMQ_DEFAULT_PASS: armada_pass
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: armada_user
+      POSTGRES_PASSWORD: armada_pass
+      POSTGRES_DB: armada_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  armada-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: armada-app
+    depends_on:
+      - mqtt-broker
+      - rabbitmq
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      RABBITMQ_URL: amqp://armada_user:armada_pass@rabbitmq:5672/
+      MQTT_BROKER: tcp://mqtt-broker:1883
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: armada_db
+      DB_USERNAME: armada_user
+      DB_PASSWORD: armada_pass
+    restart: unless-stopped
+    links:
+      - postgres
+
+  # armada-publisher:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: go run mock/publisher.go
+  #   depends_on:
+  #     - mqtt-broker
+  #   environment:
+  #     MQTT_BROKER: tcp://mqtt-broker:1883
+  #   volumes:
+  #     - .:/app
+  #   working_dir: /app
+
+volumes:
+  pgdata:

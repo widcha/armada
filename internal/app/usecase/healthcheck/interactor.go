@@ -20,7 +20,7 @@ func NewUsecase(postgres *sqlx.DB) Inport {
 func (i interactor) Execute(ctx context.Context) (InportResponse, error) {
 	if err := i.postgres.PingContext(ctx); err != nil {
 		return InportResponse{
-			Status: map[string]string{"database": "project-x database connection error"},
+			Status: map[string]string{"database": "armada database connection error"},
 		}, err
 	}
 

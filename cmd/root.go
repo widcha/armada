@@ -10,15 +10,16 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "Project X",
-	Short: "Welcome to Project X",
+	Use:   "Armada",
+	Short: "Welcome to Armada",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Welcome to Project X")
+		fmt.Println("Welcome to Armada")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serverCmd)
+	rootCmd.AddCommand(workerCmd)
 
 	err := godotenv.Load()
 	if err != nil {
